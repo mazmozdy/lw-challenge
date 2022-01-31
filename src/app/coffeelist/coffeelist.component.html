@@ -1,0 +1,50 @@
+<!-- <button (click)="addData()">fetchCoffeeCatalog</button> -->
+<div class="mat-elevation-z8">
+  <table mat-table class="full-width-table" matSort aria-label="Elements">
+    <!-- Id Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let row">
+        <b>{{ row.blend_name }}</b>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="origin">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Origin</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.origin }}
+      </td>
+    </ng-container>
+    <!-- Variety Column -->
+    <ng-container matColumnDef="variety">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Variety</th>
+      <td mat-cell *matCellDef="let row">{{ row.variety }}</td>
+    </ng-container>
+    <!-- Notes Column -->
+    <ng-container matColumnDef="notes">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Notes</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.notes }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="showProduct(row)"
+      class="hover"
+    ></tr>
+  </table>
+
+  <mat-paginator
+    #paginator
+    [length]="dataSource?.data?.length"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>

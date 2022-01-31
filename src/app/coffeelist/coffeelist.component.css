@@ -1,0 +1,7 @@
+.full-width-table {
+  width: 100%;
+}
+tr:hover {
+  background-color: rgba(253, 255, 139, 0.411);
+  cursor: pointer;
+}

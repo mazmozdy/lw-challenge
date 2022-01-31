@@ -1,0 +1,21 @@
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.container {
+  padding-top: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-bottom: 40px;
+}
+.row {
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+a {
+  text-decoration: none;
+}
+a span {
+  color: white;
+}

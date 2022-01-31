@@ -1,0 +1,16 @@
+<div class="row">
+  <mat-card>
+    <mat-card-title>
+      {{ selectedCoffee.blend_name }}
+    </mat-card-title>
+    <mat-card-subtitle> Orgin: {{ selectedCoffee.origin }} </mat-card-subtitle>
+    <mat-card-content>
+      {{ selectedCoffee.variety }} - {{ selectedCoffee.intensifier }}
+    </mat-card-content>
+    <mat-card-footer
+      style="padding: 0px 20px 10px 15px; color: dimgray; font-style: italic"
+    >
+      {{ selectedCoffee.notes }}
+    </mat-card-footer>
+  </mat-card>
+</div>
