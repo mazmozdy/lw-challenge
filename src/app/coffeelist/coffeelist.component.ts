@@ -26,7 +26,7 @@ export class CoffeelistComponent implements AfterViewInit, OnInit, OnDestroy {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name', 'origin', 'variety', 'notes'];
   coffeeCatalog: Coffee[] = this.catalogServices.getCatalog();
-  mySubscription: Subscription = new Subscription();
+  mySubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -37,11 +37,11 @@ export class CoffeelistComponent implements AfterViewInit, OnInit, OnDestroy {
   ngOnInit(): void {
     this.mySubscription = this.catalogServices.updatedCatalog.subscribe(
       (items: Coffee[]) => {
-        console.log('items', items);
-        // this.coffeeCatalog = items;
+        this.coffeeCatalog = items;
         this.dataSource.data = items;
       }
     );
+    // this.dataSource.connect();
   }
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
@@ -49,7 +49,7 @@ export class CoffeelistComponent implements AfterViewInit, OnInit, OnDestroy {
     this.table.dataSource = this.dataSource;
   }
 
-  showProduct(data: any): void {
+  showProduct(data: Coffee): void {
     this.router.navigate(['/product', data.id]);
   }
   ngOnDestroy(): void {

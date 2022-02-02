@@ -3,8 +3,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { OnInit } from '@angular/core';
 
 // TODO: Replace this with your own data model type
 export interface Coffee {
@@ -35,7 +33,6 @@ export class CoffeelistDataSource extends DataSource<Coffee> {
 
   constructor(myCatalog: Coffee[]) {
     super();
-    console.log('myValue: ', myCatalog);
     this.data = myCatalog;
   }
 
@@ -50,7 +47,7 @@ export class CoffeelistDataSource extends DataSource<Coffee> {
       // stream for the data-table to consume.
       return merge(
         observableOf(this.data),
-        // this.data,
+        this.data.slice(),
         this.paginator.page,
         this.sort.sortChange
       ).pipe(

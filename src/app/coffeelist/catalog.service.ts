@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Coffee } from '../models/coffee.model';
-// import { Coffee } from './coffeelist-datasource';
+import { Coffee } from './coffeelist-datasource';
 
 @Injectable()
 export class CoffeeCatalogService {
@@ -18,7 +17,7 @@ export class CoffeeCatalogService {
     // },
   ];
   updatedCatalog = new Subject<Coffee[]>();
-  // selectedCoffee = new Subject<Coffee[]>();
+  selectedCoffee: Coffee;
 
   constructor(private http: HttpClient) {
     this.http
@@ -34,22 +33,16 @@ export class CoffeeCatalogService {
   getCatalog() {
     return this.coffeeCatalog.slice();
   }
-  getCoffee(id: number) {
-    return this.coffeeCatalog.slice()[id];
+  getCoffee(idParameter: number) {
+    const foundCoffee = this.coffeeCatalog.find(({ id }) => id === idParameter);
+    // console.log(
+    //   'selected coffee: ',
+    //   this.coffeeCatalog.find(({ id }) => id === idParameter)
+    // );
+    return foundCoffee;
   }
   setCatalog(catalog: Coffee[]) {
     this.coffeeCatalog.push(...catalog);
     this.updatedCatalog.next(this.coffeeCatalog.slice());
-  }
-  fetchCatalog() {
-    this.http
-      .get<Coffee[]>(
-        'https://random-data-api.com/api/coffee/random_coffee?size=50'
-      )
-      .subscribe((items) => {
-        this.coffeeCatalog.push(...items);
-        this.updatedCatalog.next(this.coffeeCatalog.slice());
-      });
-    return this.coffeeCatalog;
   }
 }

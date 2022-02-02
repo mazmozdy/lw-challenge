@@ -1,23 +1,32 @@
-import { Component, OnInit } from "@angular/core";
-import { Coffee } from "../../models/coffee.model";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Coffee } from '../../models/coffee.model';
+import { CoffeeCatalogService } from '../catalog.service';
 
 @Component({
-  selector: "app-coffee",
-  templateUrl: "./coffee.component.html",
-  styleUrls: ["./coffee.component.css"],
+  selector: 'app-coffee',
+  templateUrl: './coffee.component.html',
+  styleUrls: ['./coffee.component.css'],
 })
 export class CoffeeComponent implements OnInit {
-  selectedCoffee: Coffee = {
-    id: 1234,
-    uid: "87c842ff-b956-4ba0-afaf-7ea03e285480",
-    blend_name: "Dummy data",
-    origin: "Kabirizi, Rwanda",
-    variety: "Dilla",
-    notes: "mild, syrupy, cantaloupe, cantaloupe, nutmeg",
-    intensifier: "vibrant",
-  };
+  mySubscription: Subscription;
+  selectedCoffee: Coffee;
+  id: number;
+  myCoffee: any;
+  constructor(
+    private route: ActivatedRoute,
+    private catalogServices: CoffeeCatalogService
+  ) {}
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      this.id = +params['id'];
+      this.myCoffee = this.catalogServices.getCoffee(this.id);
+    });
+    // console.log(this.id);
+    // console.log(this.catalogServices.getCoffee(this.id));
+    // console.log(this.myCoffee, 'this.myCoffee');
+    this.selectedCoffee = this.myCoffee;
+  }
 }
