@@ -8,9 +8,9 @@ import { Coffee } from "../../models/coffee.model";
 })
 export class CoffeeComponent implements OnInit {
   selectedCoffee: Coffee = {
-    id: 4838,
+    id: 1234,
     uid: "87c842ff-b956-4ba0-afaf-7ea03e285480",
-    blend_name: "Summer Select",
+    blend_name: "Dummy data",
     origin: "Kabirizi, Rwanda",
     variety: "Dilla",
     notes: "mild, syrupy, cantaloupe, cantaloupe, nutmeg",

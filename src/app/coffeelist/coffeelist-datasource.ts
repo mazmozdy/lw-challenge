@@ -1,9 +1,10 @@
-import { DataSource } from "@angular/cdk/collections";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { map } from "rxjs/operators";
-import { Observable, of as observableOf, merge } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import { DataSource } from '@angular/cdk/collections';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { map } from 'rxjs/operators';
+import { Observable, of as observableOf, merge } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { OnInit } from '@angular/core';
 
 // TODO: Replace this with your own data model type
 export interface Coffee {
@@ -19,7 +20,7 @@ export interface Coffee {
 // TODO: replace this with real data from your application
 // https://random-data-api.com/api/coffee/random_coffee?size=50
 
-let COFFEE_DATA: Coffee[] = [];
+// let COFFEE_DATA: Coffee[] = [];
 
 /**
  * Data source for the Coffeelist view. This class should
@@ -28,23 +29,14 @@ let COFFEE_DATA: Coffee[] = [];
  */
 
 export class CoffeelistDataSource extends DataSource<Coffee> {
-  data: any = COFFEE_DATA;
+  data: Coffee[] = [];
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
 
-  copiedData = this.myCatalog();
-  constructor(private http: HttpClient) {
+  constructor(myCatalog: Coffee[]) {
     super();
-  }
-  myCatalog() {
-    this.http
-      .get("https://random-data-api.com/api/coffee/random_coffee?size=50")
-      .pipe()
-      .subscribe((items) => {
-        this.data = items;
-      });
-
-    return this.data;
+    console.log('myValue: ', myCatalog);
+    this.data = myCatalog;
   }
 
   /**
@@ -68,7 +60,7 @@ export class CoffeelistDataSource extends DataSource<Coffee> {
       );
     } else {
       throw Error(
-        "Please set the paginator and sort on the data source before connecting."
+        'Please set the paginator and sort on the data source before connecting.'
       );
     }
   }
@@ -84,7 +76,6 @@ export class CoffeelistDataSource extends DataSource<Coffee> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getPagedData(data: Coffee[]): Coffee[] {
-    console.log("getPagedData", this.data);
     if (this.paginator) {
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       return data.splice(startIndex, this.paginator.pageSize);
@@ -98,17 +89,17 @@ export class CoffeelistDataSource extends DataSource<Coffee> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getSortedData(data: Coffee[]): Coffee[] {
-    if (!this.sort || !this.sort.active || this.sort.direction === "") {
+    if (!this.sort || !this.sort.active || this.sort.direction === '') {
       return data;
     }
 
     return data.sort((a, b) => {
-      const isAsc = this.sort?.direction === "asc";
+      const isAsc = this.sort?.direction === 'asc';
       // console.log(a);
       switch (this.sort?.active) {
-        case "name":
+        case 'name':
           return compare(a.blend_name, b.blend_name, isAsc);
-        case "origin":
+        case 'origin':
           return compare(+a.origin, +b.origin, isAsc);
         default:
           return 0;

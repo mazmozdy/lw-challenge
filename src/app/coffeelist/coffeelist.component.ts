@@ -1,33 +1,47 @@
-import { HttpClient } from "@angular/common/http";
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTable } from "@angular/material/table";
-import { Router } from "@angular/router";
-import { CoffeelistDataSource, Coffee } from "./coffeelist-datasource";
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTable } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { CoffeeCatalogService } from './catalog.service';
+import { CoffeelistDataSource, Coffee } from './coffeelist-datasource';
 
 @Component({
-  selector: "app-coffeelist",
-  templateUrl: "./coffeelist.component.html",
-  styleUrls: ["./coffeelist.component.css"],
+  selector: 'app-coffeelist',
+  templateUrl: './coffeelist.component.html',
+  styleUrls: ['./coffeelist.component.css'],
 })
-export class CoffeelistComponent implements AfterViewInit, OnInit {
+export class CoffeelistComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Coffee>;
   dataSource: CoffeelistDataSource;
-
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ["name", "origin", "variety", "notes"];
-  loadedCatalog: any = [];
+  displayedColumns = ['name', 'origin', 'variety', 'notes'];
+  coffeeCatalog: Coffee[] = this.catalogServices.getCatalog();
+  mySubscription: Subscription = new Subscription();
 
-  constructor(private router: Router, private http: HttpClient) {
-    this.dataSource = new CoffeelistDataSource(http);
+  constructor(
+    private router: Router,
+    private catalogServices: CoffeeCatalogService
+  ) {
+    this.dataSource = new CoffeelistDataSource(this.coffeeCatalog);
   }
   ngOnInit(): void {
-    this.fetchCoffeeCatalog();
-    this.dataSource = new CoffeelistDataSource(this.http);
-    console.log("oninit");
+    this.mySubscription = this.catalogServices.updatedCatalog.subscribe(
+      (items: Coffee[]) => {
+        console.log('items', items);
+        // this.coffeeCatalog = items;
+        this.dataSource.data = items;
+      }
+    );
   }
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
@@ -36,19 +50,9 @@ export class CoffeelistComponent implements AfterViewInit, OnInit {
   }
 
   showProduct(data: any): void {
-    this.router.navigate(["/product", data.id]);
+    this.router.navigate(['/product', data.id]);
   }
-
-  onFetchCoffeeCatalog() {
-    this.fetchCoffeeCatalog();
-  }
-
-  private fetchCoffeeCatalog() {
-    // this.http
-    //   .get<Coffee>("https://random-data-api.com/api/coffee/random_coffee")
-    //   .pipe()
-    //   .subscribe((items) => {
-    //     this.loadedCatalog = items;
-    //   });
+  ngOnDestroy(): void {
+    this.mySubscription.unsubscribe();
   }
 }

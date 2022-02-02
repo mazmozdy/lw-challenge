@@ -9,6 +9,7 @@ import { MaterialUiModule } from "./modules/material-ui.module";
 import { CoffeeComponent } from "./coffeelist/coffee/coffee.component";
 import { CoffeelistComponent } from "./coffeelist/coffeelist.component";
 import { HttpClientModule } from "@angular/common/http";
+import { CoffeeCatalogService } from "./coffeelist/catalog.service";
 
 @NgModule({
   declarations: [AppComponent, CoffeeComponent, CoffeelistComponent],
@@ -20,7 +21,7 @@ import { HttpClientModule } from "@angular/common/http";
     MaterialUiModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [CoffeeCatalogService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
