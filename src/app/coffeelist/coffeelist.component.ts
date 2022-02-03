@@ -9,7 +9,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { CoffeeCatalogService } from './catalog.service';
 import { CoffeelistDataSource, Coffee } from './coffeelist-datasource';
 
@@ -18,30 +17,28 @@ import { CoffeelistDataSource, Coffee } from './coffeelist-datasource';
   templateUrl: './coffeelist.component.html',
   styleUrls: ['./coffeelist.component.css'],
 })
-export class CoffeelistComponent implements AfterViewInit, OnInit, OnDestroy {
+export class CoffeelistComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Coffee>;
   dataSource: CoffeelistDataSource;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name', 'origin', 'variety', 'notes'];
-  coffeeCatalog: Coffee[] = this.catalogServices.getCatalog();
-  mySubscription: Subscription;
+  coffeeCatalog: Coffee[]; //= this.catalogServices.getCatalog();
 
   constructor(
     private router: Router,
     private catalogServices: CoffeeCatalogService
-  ) {
-    this.dataSource = new CoffeelistDataSource(this.coffeeCatalog);
-  }
+  ) {}
+
   ngOnInit(): void {
-    this.mySubscription = this.catalogServices.updatedCatalog.subscribe(
-      (items: Coffee[]) => {
-        this.coffeeCatalog = items;
-        this.dataSource.data = items;
-      }
-    );
-    // this.dataSource.connect();
+    this.catalogServices.fetchCatalog().subscribe((items) => {
+      // this.catalogServices.updateCatalog(items);
+      this.coffeeCatalog = items;
+      this.dataSource.data = items;
+      console.log(' Oninit', this.catalogServices.getCatalog());
+    });
+    this.dataSource = new CoffeelistDataSource(this.coffeeCatalog);
   }
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
@@ -51,8 +48,7 @@ export class CoffeelistComponent implements AfterViewInit, OnInit, OnDestroy {
 
   showProduct(data: Coffee): void {
     this.router.navigate(['/product', data.id]);
-  }
-  ngOnDestroy(): void {
-    this.mySubscription.unsubscribe();
+    this.catalogServices.setCoffee(data);
+    console.log(data);
   }
 }

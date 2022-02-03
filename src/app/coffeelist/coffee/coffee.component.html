@@ -3,17 +3,25 @@
 </div>
 <div class="row">
   <mat-card>
-    <mat-card-title>
-      {{ selectedCoffee.blend_name }}
-    </mat-card-title>
-    <mat-card-subtitle> Orgin: {{ selectedCoffee.origin }} </mat-card-subtitle>
-    <mat-card-content>
-      {{ selectedCoffee.variety }} - {{ selectedCoffee.intensifier }}
-    </mat-card-content>
-    <mat-card-footer
-      style="padding: 0px 20px 10px 15px; color: dimgray; font-style: italic"
-    >
-      {{ selectedCoffee.notes }}
-    </mat-card-footer>
+    <div *ngIf="!selectedCoffee">
+      <h3>Please make a selection!</h3>
+      Error: No coffee was selected from our catalog
+    </div>
+    <div *ngIf="selectedCoffee">
+      <mat-card-title>
+        {{ selectedCoffee.blend_name }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Orgin: {{ selectedCoffee.origin }}
+      </mat-card-subtitle>
+      <mat-card-content>
+        {{ selectedCoffee.variety }} - {{ selectedCoffee.intensifier }}
+      </mat-card-content>
+      <mat-card-footer
+        style="padding: 0px 20px 10px 15px; color: dimgray; font-style: italic"
+      >
+        {{ selectedCoffee.notes }}
+      </mat-card-footer>
+    </div>
   </mat-card>
 </div>
