@@ -3,6 +3,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.state';
+import { loadCatalog, loadCatalogError } from '../store/catalog.actions';
 import { CoffeeCatalogService } from './catalog.service';
 import { CoffeelistDataSource, Coffee } from './coffeelist-datasource';
 
@@ -18,20 +21,31 @@ export class CoffeelistComponent implements AfterViewInit, OnInit {
   dataSource: CoffeelistDataSource;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name', 'origin', 'variety', 'notes'];
-  coffeeCatalog: Coffee[]; //= this.catalogServices.getCatalog();
+  coffeeCatalog: Coffee[];
 
   constructor(
     private router: Router,
-    private catalogServices: CoffeeCatalogService
+    private catalogServices: CoffeeCatalogService,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.catalogServices.fetchCatalog().subscribe((items) => {
-      // this.catalogServices.updateCatalog(items);
-      this.coffeeCatalog = items;
-      this.dataSource.data = items;
-      console.log(' Oninit', this.catalogServices.getCatalog());
+    // console.log(this.store.select('coffeeCatalog'));
+    this.store.dispatch(loadCatalogError({ error: 'Error.. ' }));
+    this.store
+      .select('coffeeCatalog')
+      .subscribe((res) => console.log('test', res.testString));
+    this.store.dispatch(loadCatalog());
+    this.store.select('coffeeCatalog').subscribe((items) => {
+      console.log('coffeeCatalog: ', items);
     });
+
+    // this.catalogServices.fetchCatalog().subscribe((items) => {
+    //   // this.catalogServices.updateCatalog(items);
+    //   this.coffeeCatalog = items;
+    //   this.dataSource.data = items;
+    //   // console.log(' Oninit', this.catalogServices.getCatalog());
+    // });
     this.dataSource = new CoffeelistDataSource(this.coffeeCatalog);
   }
   ngAfterViewInit(): void {

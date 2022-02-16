@@ -12,7 +12,7 @@ export class CoffeeCatalogService {
   //catalog functions
   fetchCatalog() {
     return this.http.get<Coffee[]>(
-      'https://random-data-api.com/api/coffee/random_coffee?size=50'
+      'https://random-data-api.com/api/coffee/random_coffee?size=5'
     );
   }
   getCatalog() {
