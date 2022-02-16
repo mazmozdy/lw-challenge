@@ -11,7 +11,7 @@ export const loadCatalogError = createAction(
   props<{ error: string }>()
 );
 
-export const loadProduct = createAction(
+export const setProduct = createAction(
   '[Product] Load Product',
   props<{ product: Coffee }>()
 );

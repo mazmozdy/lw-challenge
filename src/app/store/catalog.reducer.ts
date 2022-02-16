@@ -36,7 +36,7 @@ export const _catalogReducer = createReducer(
     catalog: [],
     testString: 'Error loading.. ' + error,
   })),
-  on(CoffeeActions.loadProduct, (state, { product }) => ({
+  on(CoffeeActions.setProduct, (state, { product }) => ({
     ...state,
     coffee: product,
   }))

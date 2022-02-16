@@ -5,8 +5,7 @@ import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
-import { loadCatalog, loadCatalogError } from '../store/catalog.actions';
-import { CoffeeCatalogService } from './catalog.service';
+import * as CatalogActions from '../store/catalog.actions';
 import { CoffeelistDataSource, Coffee } from './coffeelist-datasource';
 
 @Component({
@@ -23,29 +22,14 @@ export class CoffeelistComponent implements AfterViewInit, OnInit {
   displayedColumns = ['name', 'origin', 'variety', 'notes'];
   coffeeCatalog: Coffee[];
 
-  constructor(
-    private router: Router,
-    private catalogServices: CoffeeCatalogService,
-    private store: Store<AppState>
-  ) {}
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    // console.log(this.store.select('coffeeCatalog'));
-    this.store.dispatch(loadCatalogError({ error: 'Error.. ' }));
-    this.store
-      .select('coffeeCatalog')
-      .subscribe((res) => console.log('test', res.testString));
-    this.store.dispatch(loadCatalog());
+    this.store.dispatch(CatalogActions.loadCatalog());
     this.store.select('coffeeCatalog').subscribe((items) => {
-      console.log('coffeeCatalog: ', items);
+      this.dataSource.data = items.catalog;
+      this.coffeeCatalog = items.catalog;
     });
-
-    // this.catalogServices.fetchCatalog().subscribe((items) => {
-    //   // this.catalogServices.updateCatalog(items);
-    //   this.coffeeCatalog = items;
-    //   this.dataSource.data = items;
-    //   // console.log(' Oninit', this.catalogServices.getCatalog());
-    // });
     this.dataSource = new CoffeelistDataSource(this.coffeeCatalog);
   }
   ngAfterViewInit(): void {
@@ -56,7 +40,6 @@ export class CoffeelistComponent implements AfterViewInit, OnInit {
 
   showProduct(data: Coffee): void {
     this.router.navigate(['/product', data.id]);
-    this.catalogServices.setCoffee(data);
-    console.log(data);
+    this.store.dispatch(CatalogActions.setProduct({ product: data }));
   }
 }

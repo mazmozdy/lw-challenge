@@ -46,7 +46,7 @@ export class CoffeelistDataSource extends DataSource<Coffee> {
       // Combine everything that affects the rendered data into one update
       // stream for the data-table to consume.
       return merge(
-        observableOf(this.data),
+        // observableOf(this.data),
         this.data.slice(),
         this.paginator.page,
         this.sort.sortChange

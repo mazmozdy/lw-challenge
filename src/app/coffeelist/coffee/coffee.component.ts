@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CoffeeCatalogService } from '../catalog.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.state';
 import { Coffee } from '../coffeelist-datasource';
 
 @Component({
@@ -10,12 +11,11 @@ import { Coffee } from '../coffeelist-datasource';
 export class CoffeeComponent implements OnInit {
   id: number;
   selectedCoffee: Coffee;
-  constructor(private catalogServices: CoffeeCatalogService) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.selectedCoffee = this.catalogServices.getCoffee();
-    // this.route.params.subscribe((params: Params) => {
-    //   this.id = +params['id'];
-    // });
+    this.store.select('coffeeCatalog').subscribe((state) => {
+      this.selectedCoffee = state.coffee;
+    });
   }
 }

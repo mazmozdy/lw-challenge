@@ -9,7 +9,6 @@ import { MaterialUiModule } from './modules/material-ui.module';
 import { CoffeeComponent } from './coffeelist/coffee/coffee.component';
 import { CoffeelistComponent } from './coffeelist/coffeelist.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CoffeeCatalogService } from './coffeelist/catalog.service';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { catalogReducer } from './store/catalog.reducer';
@@ -24,10 +23,10 @@ import { CatalogEffects } from './store/catalog.effects';
     LayoutModule,
     MaterialUiModule,
     HttpClientModule,
-    StoreModule.forRoot({ catalog: catalogReducer }),
+    StoreModule.forRoot({ coffeeCatalog: catalogReducer }),
     EffectsModule.forRoot([CatalogEffects]),
   ],
-  providers: [CoffeeCatalogService],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
