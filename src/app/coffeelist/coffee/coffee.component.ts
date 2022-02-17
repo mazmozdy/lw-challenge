@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ import { Coffee } from '../coffeelist-datasource';
   selector: 'app-coffee',
   templateUrl: './coffee.component.html',
   styleUrls: ['./coffee.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoffeeComponent implements OnInit {
   id: number;

@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -12,6 +18,7 @@ import { CoffeelistDataSource, Coffee } from './coffeelist-datasource';
   selector: 'app-coffeelist',
   templateUrl: './coffeelist.component.html',
   styleUrls: ['./coffeelist.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoffeelistComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
